@@ -33,21 +33,28 @@ class HomeScreen extends GetView<HomeController> {
             const SizedBox(height: 14),
             SizedBox(
               height: 224,
-              child: Obx(
-                () => ListView.separated(
+              child: Obx(() {
+                final spotlight = controller.spotlight;
+                if (spotlight.isEmpty) {
+                  return _SpotlightPlaceholder(
+                    isLoading: controller.directory.isLoading.value,
+                  );
+                }
+
+                return ListView.separated(
                   scrollDirection: Axis.horizontal,
                   clipBehavior: Clip.none,
-                  itemCount: controller.spotlight.length,
+                  itemCount: spotlight.length,
                   separatorBuilder: (_, __) => const SizedBox(width: 12),
                   itemBuilder: (context, index) {
-                    final shop = controller.spotlight[index];
+                    final shop = spotlight[index];
                     return SpotlightShopCard(
                       shop: shop,
                       onTap: () => controller.openShop(shop),
                     );
                   },
-                ),
-              ),
+                );
+              }),
             ),
             const SizedBox(height: 26),
             const _Reveal(child: _DailyPourCard()),
@@ -280,63 +287,121 @@ class _QuickActions extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    final actions = [
-      (Icons.menu_book_rounded, 'Learn beans', 'Arabica vs Robusta', 1),
-      (Icons.receipt_long_rounded, 'Order sheet', 'Say it right', 2),
-      (Icons.place_rounded, 'Spot finder', '6 local spots', 3),
-    ];
+    return Obx(() {
+      final spotCount = controller.directory.shops.length;
+      final actions = [
+        (Icons.menu_book_rounded, 'Learn beans', 'Arabica vs Robusta', 1),
+        (Icons.receipt_long_rounded, 'Order sheet', 'Say it right', 2),
+        (
+          Icons.place_rounded,
+          'Spot finder',
+          spotCount == 0 ? 'Live guide' : '$spotCount local spots',
+          3,
+        ),
+      ];
 
-    return Row(
-      children: [
-        for (var i = 0; i < actions.length; i++) ...[
-          if (i > 0) const SizedBox(width: 10),
-          Expanded(
-            child: SoftCard(
-              color: AppColors.cream,
-              borderRadius: 20,
-              padding: const EdgeInsets.all(13),
-              onTap: () => controller.openTab(actions[i].$4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 34,
-                    height: 34,
-                    decoration: BoxDecoration(
-                      color: AppColors.almond,
-                      borderRadius: BorderRadius.circular(11),
+      return Row(
+        children: [
+          for (var i = 0; i < actions.length; i++) ...[
+            if (i > 0) const SizedBox(width: 10),
+            Expanded(
+              child: SoftCard(
+                color: AppColors.cream,
+                borderRadius: 20,
+                padding: const EdgeInsets.all(13),
+                onTap: () => controller.openTab(actions[i].$4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: 34,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        color: AppColors.almond,
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: Icon(
+                        actions[i].$1,
+                        size: 17,
+                        color: AppColors.caramelDeep,
+                      ),
                     ),
-                    child: Icon(
-                      actions[i].$1,
-                      size: 17,
-                      color: AppColors.caramelDeep,
+                    const SizedBox(height: 10),
+                    Text(
+                      actions[i].$2,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                            fontSize: 12.5,
+                            color: AppColors.espresso,
+                          ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    actions[i].$2,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontSize: 12.5,
-                          color: AppColors.espresso,
-                        ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    actions[i].$3,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          fontSize: 10,
-                        ),
-                  ),
-                ],
+                    const SizedBox(height: 2),
+                    Text(
+                      actions[i].$3,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            fontSize: 10,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
+          ],
         ],
-      ],
+      );
+    });
+  }
+}
+
+class _SpotlightPlaceholder extends StatelessWidget {
+  const _SpotlightPlaceholder({required this.isLoading});
+
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return SizedBox(
+      width: 266,
+      child: SoftCard(
+        color: AppColors.cream,
+        borderRadius: 26,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.almond,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: Icon(
+                isLoading ? Icons.cloud_sync_rounded : Icons.cloud_off_rounded,
+                size: 19,
+                color: AppColors.caramelDeep,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Text(
+              isLoading ? 'Fetching Karachi spots…' : 'Spots are offline',
+              style: theme.textTheme.titleMedium,
+            ),
+            const SizedBox(height: 5),
+            Text(
+              isLoading
+                  ? 'Pulling live menus and prices from the bar.'
+                  : 'Open the Spots tab to retry the live directory.',
+              style: theme.textTheme.bodySmall,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

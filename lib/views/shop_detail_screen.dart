@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../controllers/navigation_controller.dart';
-import '../data/shop_directory.dart';
+import '../controllers/shop_directory_controller.dart';
 import '../models/coffee_shop_model.dart';
 import '../theme/app_colors.dart';
 import '../utils/shop_style.dart';
@@ -12,15 +12,16 @@ import '../widgets/soft_card.dart';
 class ShopDetailScreen extends StatelessWidget {
   const ShopDetailScreen({super.key});
 
-  CoffeeShopModel get _shop {
+  CoffeeShopModel? get _shop {
     final args = Get.arguments;
     if (args is CoffeeShopModel) return args;
-    return ShopDirectoryData.shops.first;
+    return Get.find<ShopDirectoryController>().selectedShop.value;
   }
 
   @override
   Widget build(BuildContext context) {
     final shop = _shop;
+    if (shop == null) return const _MissingShopScreen();
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -106,6 +107,59 @@ class ShopDetailScreen extends StatelessWidget {
                       ),
                   ],
                 ),
+                if (shop.menu.isNotEmpty) ...[
+                  const SizedBox(height: 20),
+                  Text('Live menu', style: theme.textTheme.headlineSmall),
+                  const SizedBox(height: 3),
+                  Text(
+                    'Fetched from the bar · prices in PKR',
+                    style: theme.textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 10),
+                  SoftCard(
+                    color: AppColors.cream,
+                    showShadow: false,
+                    child: Column(
+                      children: [
+                        for (var i = 0; i < shop.menu.length; i++) ...[
+                          if (i > 0) const _InfoDivider(),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      shop.menu[i].name,
+                                      style:
+                                          theme.textTheme.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    if (shop.menu[i].note != null)
+                                      Text(
+                                        shop.menu[i].note!,
+                                        style: theme.textTheme.bodySmall,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                'PKR ${CoffeeShopModel.formatPkr(shop.menu[i].price)}',
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: AppColors.hazelnut,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 20),
                 Text('Order like a regular',
                     style: theme.textTheme.headlineSmall),
@@ -168,6 +222,43 @@ class ShopDetailScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _MissingShopScreen extends StatelessWidget {
+  const _MissingShopScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.cream,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(28),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.storefront_rounded,
+                size: 32,
+                color: AppColors.caramelDeep,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'That spot is no longer in the live directory.',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 14),
+              OutlinedButton(
+                onPressed: () => Get.back(),
+                child: const Text('Back to the directory'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

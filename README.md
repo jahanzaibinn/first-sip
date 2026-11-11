@@ -53,7 +53,8 @@ lib/
 ├── models/                   # CoffeeBeanModel, DrinkRecommendationModel,
 │                             # CoffeeShopModel, BrewOption, QuizStep, MilkRatio
 ├── data/                     # Static content: beans, quiz, order options,
-│                             # drink catalog + matrix, shop directory
+│                             # drink catalog + matrix, filter taxonomy
+├── services/                 # CoffeeApiService (HTTP + JSON parsing)
 ├── controllers/              # QuizController, OrderBuilderController,
 │                             # ShopDirectoryController, HomeController,
 │                             # BeanGuideController, NavigationController
@@ -66,6 +67,30 @@ lib/
 
 State flow is deliberately one-directional: views read reactive getters inside `Obx`,
 controllers own the `Rx` state, and `data/` stays immutable `const` content.
+
+### Live directory data
+
+`ShopDirectoryController` no longer reads a hardcoded shop list. On `onInit` it
+calls `CoffeeApiService.fetchShops()`, which GETs a JSON directory (by default
+`data/coffee_spots.json` in this repository) and parses each entry with
+`CoffeeShopModel.fromJson`.
+
+The directory screen renders three states inside one `Obx`: pulsing skeleton
+cards while loading, an error card with a **Retry** button, and the populated
+list. `RefreshIndicator` calls `refresh()`, which keeps the visible list on a
+failed refresh and reports the problem in a snackbar. PKR ranges are derived
+from each shop's `menu` prices, and the detail screen lists those items, so
+editing the payload changes both the card badge and the menu section.
+
+Point the app at another endpoint with:
+
+```bash
+flutter run --dart-define=COFFEE_MENU_URL=https://your.api/coffee_spots.json
+```
+
+Payload shape: `{"updatedAt": "...", "shops": [{ ..., "menu": [{"name": "Flat White", "price": 750, "note": "..."}]}]}`.
+A bare JSON array of shops is also accepted; `updatedAt` only powers the
+"live prices" status line.
 
 ### Order phrase composition
 
@@ -104,6 +129,7 @@ flutter analyze
 flutter test
 ```
 
-`flutter analyze` is clean, and the tests cover the exact counter phrase, black-coffee
-naming, cold-brew temperature locking, size-scaled caffeine, reset behaviour and the
-quiz state machine including result navigation.
+`flutter analyze` is clean. The tests cover the exact counter phrase, black-coffee
+naming, cold-brew temperature locking, size-scaled caffeine, reset behaviour, the
+quiz state machine including result navigation, JSON parsing and PKR derivation,
+HTTP error handling, and the directory controller's loading/error/filter state.

@@ -1,19 +1,22 @@
 import 'package:get/get.dart';
 
 import '../data/drink_catalog.dart';
-import '../data/shop_directory.dart';
 import '../models/coffee_shop_model.dart';
 import '../models/drink_recommendation_model.dart';
 import '../routes/app_routes.dart';
 import 'navigation_controller.dart';
+import 'shop_directory_controller.dart';
 
 /// Home dashboard state: greeting, daily pour and spotlight outlets.
 class HomeController extends GetxController {
   final Rx<DrinkRecommendationModel> dailyPour =
       DrinkCatalog.resolve(taste: 'sweet_milky', energy: 'casual').obs;
 
-  final RxList<CoffeeShopModel> spotlight =
-      ShopDirectoryData.shops.take(4).toList(growable: false).obs;
+  final ShopDirectoryController directory = Get.find<ShopDirectoryController>();
+
+  /// First four outlets from the live directory, so the rail tracks the API.
+  List<CoffeeShopModel> get spotlight =>
+      directory.shops.take(4).toList(growable: false);
 
   String get greeting {
     final hour = DateTime.now().hour;
@@ -51,7 +54,5 @@ class HomeController extends GetxController {
   void openShop(CoffeeShopModel shop) =>
       Get.toNamed(AppRoutes.shopDetail, arguments: shop);
 
-  void refreshSpotlight() {
-    spotlight.assignAll(ShopDirectoryData.shops.reversed.take(4));
-  }
+  Future<void> refreshSpotlight() => directory.refreshDirectory();
 }
