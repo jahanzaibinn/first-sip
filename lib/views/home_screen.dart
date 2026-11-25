@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:get/get.dart';
 
 import '../controllers/home_controller.dart';
@@ -72,8 +72,7 @@ class _HomeHeader extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Row(
+    return Row(
         children: [
           Container(
             width: 46,
@@ -131,8 +130,7 @@ class _HomeHeader extends GetView<HomeController> {
             ),
           ),
         ],
-      ),
-    );
+      );
   }
 }
 

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:get/get.dart';
 
 import '../controllers/shop_directory_controller.dart';
@@ -115,8 +115,7 @@ class _ShopDirectoryScreenState extends State<ShopDirectoryScreen> {
           const SizedBox(height: 12),
           SizedBox(
             height: 40,
-            child: Obx(
-              () => ListView.separated(
+            child:ListView.separated(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 itemCount: controller.filters.length,
@@ -130,8 +129,7 @@ class _ShopDirectoryScreenState extends State<ShopDirectoryScreen> {
                     compact: true,
                   );
                 },
-              ),
-            ),
+              )
           ),
           const SizedBox(height: 10),
           Padding(
