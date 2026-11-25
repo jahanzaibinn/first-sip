@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../controllers/navigation_controller.dart';
 import '../controllers/shop_directory_controller.dart';
 import '../models/coffee_shop_model.dart';
+import '../routes/app_routes.dart';
 import '../theme/app_colors.dart';
 import '../utils/shop_style.dart';
 import '../widgets/soft_card.dart';
@@ -23,6 +24,7 @@ class ShopDetailScreen extends StatelessWidget {
     final shop = _shop;
     if (shop == null) return const _MissingShopScreen();
     final theme = Theme.of(context);
+    final directory = Get.find<ShopDirectoryController>();
 
     return Scaffold(
       backgroundColor: AppColors.cream,
@@ -197,6 +199,27 @@ class ShopDetailScreen extends StatelessWidget {
                   if (i != shop.mustTry.length - 1) const SizedBox(height: 10),
                 ],
                 const SizedBox(height: 24),
+                Row(
+                  children: [
+                    Expanded(
+                      child: FilledButton.icon(
+                        onPressed: () => directory.openDirections(shop),
+                        icon: const Icon(Icons.directions_rounded, size: 17),
+                        label: const Text('Directions'),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () =>
+                            Get.toNamed(AppRoutes.voiceOrder, arguments: shop),
+                        icon: const Icon(Icons.mic_rounded, size: 17),
+                        label: const Text('Ask in Urdu'),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     Expanded(
@@ -413,6 +436,32 @@ class _DetailHero extends StatelessWidget {
                         color: AppColors.cream.withValues(alpha: 0.85),
                       ),
                     ),
+                    Obx(() {
+                      final label = Get.find<ShopDirectoryController>()
+                          .distanceLabelFor(shop);
+                      if (label == null) return const SizedBox.shrink();
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 7,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.caramel.withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: Text(
+                            '$label away',
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: AppColors.caramel,
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
                     const SizedBox(width: 12),
                     for (final category in shop.categories.take(2)) ...[
                       Icon(

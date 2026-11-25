@@ -2,9 +2,11 @@ import 'package:get/get.dart';
 
 import '../bindings/main_shell_binding.dart';
 import '../bindings/quiz_binding.dart';
+import '../bindings/voice_order_binding.dart';
 import '../views/main_shell.dart';
 import '../views/quiz_screen.dart';
 import '../views/shop_detail_screen.dart';
+import '../views/voice_order_screen.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -27,6 +29,13 @@ class AppPages {
     GetPage(
       name: AppRoutes.shopDetail,
       page: () => const ShopDetailScreen(),
+      transition: Transition.cupertino,
+      transitionDuration: const Duration(milliseconds: 320),
+    ),
+    GetPage(
+      name: AppRoutes.voiceOrder,
+      page: () => const VoiceOrderScreen(),
+      binding: VoiceOrderBinding(),
       transition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 320),
     ),

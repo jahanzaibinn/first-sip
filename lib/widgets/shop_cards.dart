@@ -169,11 +169,15 @@ class DirectoryShopCard extends StatelessWidget {
     required this.shop,
     required this.onTap,
     this.onLongPress,
+    this.distanceLabel,
   });
 
   final CoffeeShopModel shop;
   final VoidCallback onTap;
   final VoidCallback? onLongPress;
+
+  /// Live distance from the device, e.g. `1.4 km`, shown beside the area.
+  final String? distanceLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -216,6 +220,29 @@ class DirectoryShopCard extends StatelessWidget {
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ),
+                        if (distanceLabel != null) ...[
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 7,
+                              vertical: 3,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.almond,
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: Text(
+                              distanceLabel!,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall
+                                  ?.copyWith(
+                                    color: AppColors.caramelDeep,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ],

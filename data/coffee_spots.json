@@ -15,6 +15,8 @@
       "signatureDrinks": ["V60 Pour Over", "Ethiopian Single Origin", "Flat White"],
       "mustTry": ["Ethiopian V60", "Cardamom Bun", "Iced Filter"],
       "addressHint": "Khayaban-e-Ittehad, DHA Phase 5",
+      "lat": 24.80242,
+      "lng": 67.06351,
       "badges": ["Specialty Pour Over", "Single Origin"],
       "menu": [
         {"name": "Flat White", "price": 750, "note": "Medium-dark house blend"},
@@ -36,6 +38,8 @@
       "signatureDrinks": ["Flat White", "Cortado", "Iced Latte"],
       "mustTry": ["Flat White", "Cortado", "Cold Brew"],
       "addressHint": "Off Main Clifton Road, Clifton Block 4",
+      "lat": 24.81345,
+      "lng": 67.02986,
       "badges": ["Premium Arabica", "Espresso Bar"],
       "menu": [
         {"name": "Cortado", "price": 800, "note": "50/50 espresso and milk"},
@@ -57,6 +61,8 @@
       "signatureDrinks": ["Spanish Latte", "Pistachio Latte", "Double Espresso"],
       "mustTry": ["Pistachio Latte", "Spanish Latte", "Batch Brew"],
       "addressHint": "Shahbaz Commercial Area, DHA Phase 6",
+      "lat": 24.80651,
+      "lng": 67.07509,
       "badges": ["Specialty Espresso", "Balanced Syrups"],
       "menu": [
         {"name": "Double Espresso", "price": 850},
@@ -78,6 +84,8 @@
       "signatureDrinks": ["Custom Roast Latte", "Cold Brew", "Affogato"],
       "mustTry": ["Dark roast custom latte", "Affogato", "Iced Americano"],
       "addressHint": "Main Ittehad Commercial, DHA Phase 8",
+      "lat": 24.81123,
+      "lng": 67.08111,
       "badges": ["24/7 Spot", "Custom Roast"],
       "menu": [
         {"name": "Iced Americano", "price": 800},
@@ -99,6 +107,8 @@
       "signatureDrinks": ["Cappuccino", "V60 Pour Over", "Mocha"],
       "mustTry": ["Cappuccino", "Pour Over", "Brownie"],
       "addressHint": "Block H, North Nazimabad",
+      "lat": 24.94201,
+      "lng": 67.03257,
       "badges": ["North Karachi", "Value Pours"],
       "menu": [
         {"name": "Cappuccino", "price": 650},
@@ -119,6 +129,8 @@
       "signatureDrinks": ["Iced Cold Brew", "Caramel Latte", "Mocha"],
       "mustTry": ["Cold Brew", "Caramel Latte", "Cheesecake"],
       "addressHint": "Branches in Clifton, Gulshan & Bahadurabad",
+      "lat": 24.91809,
+      "lng": 67.09735,
       "badges": ["Budget Friendly", "Work Benches"],
       "menu": [
         {"name": "Iced Cold Brew", "price": 500, "note": "Bottomless refills after 8 PM"},

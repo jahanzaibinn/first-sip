@@ -87,6 +87,8 @@ class CoffeeShopModel {
     required this.addressHint,
     required this.badges,
     this.menu = const [],
+    this.latitude,
+    this.longitude,
     String fallbackPriceRange = '',
   }) : _fallbackPriceRange = fallbackPriceRange;
 
@@ -105,8 +107,21 @@ class CoffeeShopModel {
   final List<String> badges;
   final List<CoffeeMenuItemModel> menu;
 
+  /// Live coordinates from the remote payload, used for distances and
+  /// turn-by-turn directions. Older payloads may omit them.
+  final double? latitude;
+  final double? longitude;
+
   /// Only used when the payload carries no priced menu items.
   final String _fallbackPriceRange;
+
+  bool get hasCoordinates => latitude != null && longitude != null;
+
+  /// Free-text fallback for map links when the payload has no coordinates.
+  String get mapsQuery {
+    final address = addressHint.isEmpty ? area : addressHint;
+    return [name, if (address.isNotEmpty) address, 'Karachi'].join(', ');
+  }
 
   bool get isLateNight => categories.contains(ShopCategory.lateNight);
   bool get isWorkspaceFriendly =>
@@ -208,6 +223,8 @@ class CoffeeShopModel {
       addressHint: _string(json['addressHint'] ?? json['address']),
       badges: _stringList(json['badges']),
       menu: List.unmodifiable(menu),
+      latitude: _nullableDouble(json['lat'] ?? json['latitude']),
+      longitude: _nullableDouble(json['lng'] ?? json['lon'] ?? json['longitude']),
       fallbackPriceRange: _string(json['priceRange']),
     );
   }
@@ -217,6 +234,12 @@ class CoffeeShopModel {
   static double _double(Object? value) {
     if (value is num) return value.toDouble();
     return double.tryParse(value?.toString() ?? '') ?? 0;
+  }
+
+  static double? _nullableDouble(Object? value) {
+    if (value is num) return value.toDouble();
+    if (value == null) return null;
+    return double.tryParse(value.toString());
   }
 
   static List<String> _stringList(Object? value) {

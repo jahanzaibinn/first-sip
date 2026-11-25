@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controllers/shop_directory_controller.dart';
 import '../models/coffee_shop_model.dart';
 import '../routes/app_routes.dart';
 import '../theme/app_colors.dart';
@@ -149,16 +150,28 @@ class _ShopQuickSheet extends StatelessWidget {
                 .toList(),
           ),
           const SizedBox(height: 20),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton.icon(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Get.toNamed(AppRoutes.shopDetail, arguments: shop);
-              },
-              icon: const Icon(Icons.storefront_rounded, size: 18),
-              label: const Text('View full profile'),
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () =>
+                      Get.find<ShopDirectoryController>().openDirections(shop),
+                  icon: const Icon(Icons.directions_rounded, size: 17),
+                  label: const Text('Directions'),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: FilledButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Get.toNamed(AppRoutes.shopDetail, arguments: shop);
+                  },
+                  icon: const Icon(Icons.storefront_rounded, size: 17),
+                  label: const Text('Full profile'),
+                ),
+              ),
+            ],
           ),
         ],
       ),

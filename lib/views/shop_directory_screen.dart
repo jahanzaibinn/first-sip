@@ -118,10 +118,20 @@ class _ShopDirectoryScreenState extends State<ShopDirectoryScreen> {
             child:ListView.separated(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemCount: controller.filters.length,
+                itemCount: controller.filters.length + 1,
                 separatorBuilder: (_, __) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
-                  final filter = controller.filters[index];
+                  if (index == 0) {
+                    return Obx(
+                      () => SelectableChip(
+                        label: controller.nearMeLabel,
+                        selected: controller.nearMeActive,
+                        onTap: controller.toggleNearMe,
+                        compact: true,
+                      ),
+                    );
+                  }
+                  final filter = controller.filters[index - 1];
                   return SelectableChip(
                     label: filter.label,
                     selected: controller.activeFilterId.value == filter.id,
@@ -221,6 +231,7 @@ class _ShopDirectoryScreenState extends State<ShopDirectoryScreen> {
           onLongPress: () => showShopQuickSheet(context, shop),
           child: DirectoryShopCard(
             shop: shop,
+            distanceLabel: controller.distanceLabelFor(shop),
             onTap: () => controller.openShop(shop),
           ),
         );

@@ -4,4 +4,5 @@ class AppRoutes {
   static const String shell = '/';
   static const String quiz = '/quiz';
   static const String shopDetail = '/shop-detail';
+  static const String voiceOrder = '/voice-order';
 }
