@@ -1,4 +1,4 @@
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 
 /// The single source of truth for the Karachi Coffee Compass palette.
 class AppColors {

@@ -1,5 +1,5 @@
 
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/material.dart';
 
 class HeroSectionScreen extends StatelessWidget {
   const HeroSectionScreen({super.key});
@@ -33,7 +33,7 @@ class HeroSectionScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                             blurRadius: 20,
                             offset: const Offset(0, 10),
                           ),
@@ -45,7 +45,7 @@ class HeroSectionScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            "A little wild.\nEntirely\nthoughtful.",
+                            'A little wild.\nEntirely\nthoughtful.',
                             style: TextStyle(
                               fontSize: 32,
                               fontFamily: 'Serif',
@@ -79,7 +79,7 @@ class HeroSectionScreen extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(left: 40.0), // Indented first line
                       child: Text(
-                        "Head in the clouds.",
+                        'Head in the clouds.',
                         style: TextStyle(
                           fontSize: 38,
                           fontWeight: FontWeight.w500,
@@ -90,7 +90,7 @@ class HeroSectionScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "Hands on the anvil.",
+                      'Hands on the anvil.',
                       style: TextStyle(
                         fontSize: 38,
                         fontWeight: FontWeight.w500,
